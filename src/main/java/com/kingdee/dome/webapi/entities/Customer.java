@@ -1,5 +1,8 @@
 package com.kingdee.dome.webapi.entities;
 
+import lombok.Data;
+
+@Data
 public class Customer {
 
 	long CustID;

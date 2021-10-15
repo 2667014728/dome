@@ -1,9 +1,13 @@
 package com.kingdee.dome.webapi.sdktest;
 
 import com.google.gson.Gson;
+import com.kingdee.dome.webapi.entities.AssetsCard;
 import com.kingdee.dome.webapi.entities.Customer;
 import com.kingdee.bos.webapi.sdk.*;
+
+
 import org.junit.Test;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +15,7 @@ import java.util.UUID;
 
 import static org.junit.Assert.fail;
 
-
+@Service
 public class CommonTest {
 		
 	@Test
@@ -42,6 +46,78 @@ public class CommonTest {
 		}
 
 	}
+
+	@Test
+	public void assetsCardSaveCustomer() throws Exception {
+		K3CloudApi api=new K3CloudApi();
+
+		try {
+
+
+		String sRet = api.save("FA_CARD", "{\n" +
+				"  \"NeedUpDateFields\": [],\n" +
+				"  \"NeedReturnFields\": [],\n" +
+				"  \"IsDeleteEntry\": \"true\",\n" +
+				"  \"SubSystemId\": \"\",\n" +
+				"  \"IsVerifyBaseDataField\": \"false\",\n" +
+				"  \"IsEntryBatchFill\": \"true\",\n" +
+				"  \"ValidateFlag\": \"true\",\n" +
+				"  \"NumberSearch\": \"true\",\n" +
+				"  \"IsAutoAdjustField\": \"false\",\n" +
+				"  \"InterationFlags\": \"\",\n" +
+				"  \"IgnoreInterationFlag\": \"\",\n" +
+				"  \"Model\": {\n" +
+				"    \"FAlterID\": 0,\n" +
+				"    \"FAssetOrgID\": {\n" +
+				"      \"FNumber\": \"100\"\n" +
+				"    },\n" +
+				"    \"FOwnerOrgID\": {\n" +
+				"      \"FNumber\": \"100\"\n" +
+				"    },\n" +
+				"    \"FAssetTypeID\": {\n" +
+				"      \"FNumber\": \"ZCLB04_SYS\"\n" +
+				"    },\n" +
+				"    \"FNumber\": \"1\",\n" +
+				"    \"FName\": \"测试\",\n" +
+				"    \"FUnitID\": {\n" +
+				"      \"FNUMBER\": \"cm\"\n" +
+				"    },\n" +
+				"    \"FQuantity\": 1.0,\n" +
+				"    \"FAssetStatusID\": {\n" +
+				"      \"FNumber\": \"ZCZT01_SYS\"\n" +
+				"    },\n" +
+				"    \"FAlterModeID\": {\n" +
+				"      \"FNumber\": \"BDFS01_SYS\"\n" +
+				"    },\n" +
+				"    \"FBeginUseDate\": \"2021-10-14 00:00:00\",\n" +
+				"    \"FDocumentStatus\": \"Z\",\n" +
+				"    \"FIsInit\": false,\n" +
+				"    \"FCardDetail\": [\n" +
+				"      {\n" +
+				"        \"FAssetNO\": \"1\",\n" +
+				"        \"FDetailQuantity\": 1.0,\n" +
+				"        \"FCanRecipientQty\": 1.0,\n" +
+				"        \"FIsInsured\": true\n" +
+				"      }\n" +
+				"    ],\n" +
+				"    \"FAllocation\": [\n" +
+				"      {\n" +
+				"        \"FAllocAssetNO\": \"1\",\n" +
+				"        \"FAllocRatio\": 100.0\n" +
+				"      }\n" +
+				"    ]\n" +
+				"  }\n" +
+				"}");
+
+			System.out.println(sRet);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+
+
 	
 	/*批量保存客户信息*/
 	@Test
@@ -57,16 +133,22 @@ public class CommonTest {
 		}
 
 		// 批量保存客户信息
-		SaveResult sRet = api.batchSave("BD_Customer", new BatchSave<Customer>(custs), InvokeMode.Query);
+		try {
+			SaveResult sRet = api.batchSave("BD_Customer", new BatchSave<Customer>(custs), InvokeMode.Query);
 
-		if (sRet.isSuccessfully()) {
-			Gson gson = new Gson();
-			for (int i = 0; i < custs.size(); i++)
-				System.out.println(String.format("get(%s)=%s", i,
-						gson.toJson(sRet.getResult().getResponseStatus().getSuccessEntitys().get(i))));
-		} else {
-			fail("dcs is null!");
+			if (sRet.isSuccessfully()) {
+				Gson gson = new Gson();
+				for (int i = 0; i < custs.size(); i++)
+					System.out.println(String.format("get(%s)=%s", i,
+							gson.toJson(sRet.getResult().getResponseStatus().getSuccessEntitys().get(i))));
+			} else {
+				fail("dcs is null!");
+			}
+		}catch (Exception e) {
+			fail(e.getMessage());
+			e.printStackTrace();
 		}
+
 	}
 	
 	/*表单查询接口：查询客户信息*/
@@ -95,6 +177,24 @@ public class CommonTest {
 			fail("dcs is null!");
 		}
 	}
-	
-	
+
+	@Test
+	public void demo1() throws Exception {
+/*		K3CloudApi k3CloudApiClient=new K3CloudApi("http://localhost/K3Cloud/");
+		K3CloudApiClient k3CloudApiClient = new K3CloudApiClient("http://localhost/K3Cloud/");
+		Boolean login = k3CloudApiClient.login("60b1b8a49baae0", "UserName", "Password", 2052);
+		System.out.println(login);
+
+		String json = ".........";
+		System.out.println(json);
+
+//        String result = k3CloudApiClient.excuteOperation("PYLC_ReportBill","Report", s);
+		String result = k3CloudApiClient.save("PUR_PurchaseOrder", json);
+		System.out.println(result);*/
+	}
+
+
+
+
+
 }
